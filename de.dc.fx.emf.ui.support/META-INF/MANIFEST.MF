@@ -10,7 +10,11 @@ Require-Bundle: org.eclipse.emf.common;bundle-version="2.16.0",
  de.dc.fx.emf.efxclipse.runtime;bundle-version="1.0.0",
  de.dc.fx.emf.support,
  com.google.inject;bundle-version="3.0.0",
- javax.inject;bundle-version="1.0.0"
+ javax.inject;bundle-version="1.0.0",
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro
 Export-Package: de.dc.javafx.xcore.workbench.emf.ui,
  de.dc.javafx.xcore.workbench.emf.ui.controller,
  de.dc.javafx.xcore.workbench.emf.ui.di,
