@@ -17,6 +17,7 @@ public class AppLayoutEmfTreeModeView extends EmfTreeModelView<AppLayout> {
 	public AppLayoutEmfTreeModeView() {
 		// Set edit mode for several attributes
 		addEditableFor(AppLayoutPackage.eINSTANCE.getBaseApp_Name());
+		addEditableFor(AppLayoutPackage.eINSTANCE.getApp_Controller());
 
 		
 		EMFPlatform.getInstance(IEventBroker.class).register(this);

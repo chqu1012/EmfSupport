@@ -49,6 +49,9 @@ import org.eclipse.fx.emf.edit.ui.dnd.CellDragAdapter
 import org.eclipse.fx.emf.edit.ui.dnd.EditingDomainCellDropAdapter
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import java.util.Arrays
+import java.util.List
+import javafx.scene.Node
 
 abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 	
@@ -155,7 +158,7 @@ abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 		val selectedItem = treeView.selectionModel.selectedItem
 		treeView.setEditable(true)
 		treeView.edit(selectedItem)
-		var cells = #[treeView.lookupAll(".tree-cell")]
+		var List<Node> cells = Arrays::asList(treeView.lookupAll(".tree-cell"))
 		var row = treeView.getRow(selectedItem)
 		val cell = (cells.get(row) as TreeCell<Object>)
 		var graphic = cell.graphic
