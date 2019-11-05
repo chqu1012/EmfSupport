@@ -10,7 +10,7 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/EMFModelView.css" type="VBox" xmlns="http://javafx.com/javafx/8.0.211" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/EMFModelView.css" type="VBox" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TreeView fx:id="treeView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onTreeViewMouseClicked" VBox.vgrow="ALWAYS">
          <contextMenu>
@@ -21,6 +21,9 @@
                        </items>
                     </Menu>
                     <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="saveMenu" mnemonicParsing="false" onAction="#onMenuItemAction" text="Save" />
+                  <MenuItem fx:id="loadMenu" mnemonicParsing="false" onAction="#onMenuItemAction" text="Load" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <Menu fx:id="openWithMenu" mnemonicParsing="false" text="Open With" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem mnemonicParsing="false" onAction="#onUndoMenuItemClicked" text="Undo">

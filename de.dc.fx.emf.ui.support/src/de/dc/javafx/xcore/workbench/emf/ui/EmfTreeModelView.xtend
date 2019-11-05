@@ -1,46 +1,26 @@
 package de.dc.javafx.xcore.workbench.emf.ui
 
-import java.io.IOException
-import java.net.URL
-import java.util.ArrayList
-import java.util.Collection
-import java.util.EventObject
-import java.util.List
-import java.util.logging.Level
-import java.util.logging.Logger
-import java.util.stream.Collectors
-import org.eclipse.emf.common.command.Command
-import org.eclipse.emf.ecore.EAttribute
-import org.eclipse.emf.ecore.EClass
-import org.eclipse.emf.ecore.EClassifier
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.edit.command.AddCommand
-import org.eclipse.emf.edit.command.CommandParameter
-import org.eclipse.emf.edit.command.CopyToClipboardCommand
-import org.eclipse.emf.edit.command.DeleteCommand
-import org.eclipse.emf.edit.command.PasteFromClipboardCommand
-import org.eclipse.emf.edit.provider.IItemLabelProvider
-import org.eclipse.fx.emf.edit.ui.AdapterFactoryTreeCellFactory
-import org.eclipse.fx.emf.edit.ui.AdapterFactoryTreeItem
-import org.eclipse.fx.emf.edit.ui.dnd.CellDragAdapter
-import org.eclipse.fx.emf.edit.ui.dnd.EditingDomainCellDropAdapter
 import de.dc.fx.emf.support.event.IEmfSelectionService
 import de.dc.fx.emf.support.file.IEmfManager
 import de.dc.javafx.xcore.workbench.emf.ui.di.EMFPlatform
 import de.dc.javafx.xcore.workbench.emf.ui.event.EventContext
 import de.dc.javafx.xcore.workbench.emf.ui.event.EventTopic
 import de.dc.javafx.xcore.workbench.emf.ui.event.IEventBroker
-import de.dc.javafx.xcore.workbench.emf.ui.factory.CommandFactory
 import de.dc.javafx.xcore.workbench.emf.ui.handler.CustomFeedbackHandler
 import de.dc.javafx.xcore.workbench.emf.ui.handler.EAttributeCellEditHandler
 import de.dc.javafx.xcore.workbench.emf.ui.util.EmfUtil
+import java.net.URL
+import java.util.ArrayList
+import java.util.Collection
+import java.util.EventObject
+import java.util.logging.Level
+import java.util.logging.Logger
 import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
-import javafx.scene.Node
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
@@ -54,6 +34,21 @@ import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
+import org.eclipse.emf.common.command.Command
+import org.eclipse.emf.ecore.EAttribute
+import org.eclipse.emf.ecore.EClass
+import org.eclipse.emf.edit.command.AddCommand
+import org.eclipse.emf.edit.command.CommandParameter
+import org.eclipse.emf.edit.command.CopyToClipboardCommand
+import org.eclipse.emf.edit.command.DeleteCommand
+import org.eclipse.emf.edit.command.PasteFromClipboardCommand
+import org.eclipse.emf.edit.provider.IItemLabelProvider
+import org.eclipse.fx.emf.edit.ui.AdapterFactoryTreeCellFactory
+import org.eclipse.fx.emf.edit.ui.AdapterFactoryTreeItem
+import org.eclipse.fx.emf.edit.ui.dnd.CellDragAdapter
+import org.eclipse.fx.emf.edit.ui.dnd.EditingDomainCellDropAdapter
+import javafx.stage.FileChooser
+import javafx.stage.Stage
 
 abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 	
@@ -68,6 +63,8 @@ abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 	@FXML protected MenuItem copyMenuItem
 	@FXML protected MenuItem pasteMenuItem
 	@FXML protected MenuItem deleteMenuItem
+	@FXML protected MenuItem saveMenu
+	@FXML protected MenuItem loadMenu
 	@FXML protected Menu newMenu
 	@FXML protected TreeView<Object> treeView
 	protected ObservableList<MenuItem> defaultMenuItems = FXCollections::observableArrayList()
@@ -99,6 +96,20 @@ abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 		this.manager = manager
 		this.editingDomain = manager.editingDomain
 		initTreeView
+	}
+
+	def onMenuItemAction(ActionEvent e){
+		val source = e.source
+		val chooser = new FileChooser
+		if(source == saveMenu){
+			val file = chooser.showSaveDialog(new Stage)
+			emfManager.file.write(emfManager.root, file.absolutePath)
+		}else if(source == loadMenu){
+			val file = chooser.showOpenDialog(new Stage)
+			val root = emfManager.file.load(file.absolutePath)
+			emfManager.root = root
+			initTreeView
+		}
 	}
 
 	override T load(String filepath) {
