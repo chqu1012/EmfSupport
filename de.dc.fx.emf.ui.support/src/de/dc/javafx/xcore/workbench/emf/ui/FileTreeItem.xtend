@@ -2,7 +2,6 @@ package de.dc.javafx.xcore.workbench.emf.ui
 
 import java.io.File
 import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.scene.control.TreeItem
 
 class FileTreeItem extends TreeItem<File> {
@@ -13,9 +12,9 @@ class FileTreeItem extends TreeItem<File> {
 	override getChildren() {
 		if (isFirstTimeChildren) {
 			isFirstTimeChildren = false
-			super.getChildren().setAll(buildChildren(this))
+			super.children.setAll(buildChildren(this))
 		}
-		return super.getChildren()
+		return super.children
 	}
 
 	override isLeaf() {
