@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EPackage;
 import de.dc.fx.applayout.model.AppLayout;
 import de.dc.fx.applayout.model.AppLayoutFactory;
 import de.dc.fx.applayout.model.AppLayoutPackage;
-import de.dc.fx.emf.support.EmfFile;
+import de.dc.fx.emf.support.file.EmfFile;
 
 public class AppDesignFile extends EmfFile<AppLayout>{
 

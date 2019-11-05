@@ -1,4 +1,4 @@
-package de.dc.fx.emf.support;
+package de.dc.fx.emf.support.file;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -12,8 +12,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-
-import de.dc.fx.emf.support.file.IEmfFile;
 
 public abstract class EmfFile<T> implements IEmfFile<T>{
 
