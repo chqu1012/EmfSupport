@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreSwitch;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -20,11 +21,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
-public class ControlByTypeSwitch extends EcoreSwitch<HBox> {
+public class ControlByTypeSwitch extends EcoreSwitch<Region> {
 
 	private Boolean[] booleanValues = new Boolean[] { true, false };
 
@@ -40,7 +44,19 @@ public class ControlByTypeSwitch extends EcoreSwitch<HBox> {
 	}
 
 	@Override
-	public HBox caseEAttribute(EAttribute eAttribue) {
+	public Region caseEReference(EReference object) {
+		VBox vbox = new VBox(5);
+		ListView listView = new ListView<>();
+		listView.setPrefHeight(100);
+		
+		vbox.getChildren().add(new Label(object.getName()));
+		vbox.getChildren().add(listView);
+		
+		return vbox;
+	}
+	
+	@Override
+	public Region caseEAttribute(EAttribute eAttribue) {
 		EClassifier eType = eAttribue.getEType();
 		if (eType.getName().toLowerCase().equals("boolean")) {
 			createComboBox(eAttribue);

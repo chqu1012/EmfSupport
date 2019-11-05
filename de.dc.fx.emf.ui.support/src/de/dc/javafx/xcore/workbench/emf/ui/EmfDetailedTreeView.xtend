@@ -163,7 +163,10 @@ abstract class EmfDetailedTreeView<T> extends BaseEmfDetailedTreeViewController 
 		var attributes = eObject.eClass.EAllAttributes
 		attributes.forEach[ e |
 			typeFormSwitch.setCurrentEObject(eObject)
-			attributeContainer.getChildren().add(typeFormSwitch.doSwitch(e))
+			attributeContainer.children += typeFormSwitch.doSwitch(e)
+		]
+		eObject.eClass.EAllReferences.forEach[ref | 
+			attributeContainer.children += typeFormSwitch.doSwitch(ref)
 		]
 		var acceptAllButton = new Button("Accept All")
 		acceptAllButton.setOnAction[event|typeFormSwitch.acceptAllValues]
