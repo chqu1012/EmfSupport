@@ -1,8 +1,16 @@
 package de.dc.fx.emf.support.ide.dialog;
-import java.io.File;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.core.PackageFragmentRoot;
@@ -24,7 +32,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.ide.dialogs.OpenResourceDialog;
 
 public class EmfSupportStubDialog extends TitleAreaDialog {
 	private Text textEcoreModel;
@@ -54,18 +61,30 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		buttonOpenEcoreModel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IProject project = getCurrentProject();
-				OpenResourceDialog dialog = new OpenResourceDialog(new Shell(), project, IResource.FILE);
-				int code = dialog.open();
-				if (code==0) {
-					if (dialog.getResult().length==1) {
-						Object result = dialog.getResult()[0];
-						if (result instanceof File) {
-							File file = (File) result;
-							System.out.println(file.getAbsolutePath());
-						}
+//				IProject project = getCurrentProject();
+//				OpenResourceDialog dialog = new OpenResourceDialog(new Shell(), project, IResource.FILE);
+//				int code = dialog.open();
+//				if (code==0) {
+//					if (dialog.getResult().length==1) {
+//						Object result = dialog.getResult()[0];
+//						if (result instanceof File) {
+//							File file = (File) result;
+//							System.out.println(file.getAbsolutePath());
+//						}
+//					}
+//				}
+				ResourceDialog dialog = new ResourceDialog(new Shell(), "Select an Ecore Resource", SWT.OPEN | SWT.MULTI);
+				if (dialog.open() == ResourceDialog.OK) {
+					for (org.eclipse.emf.common.util.URI uri : dialog.getURIs()) {
+						Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+						Map<String, Object> m = reg.getExtensionToFactoryMap();
+						m.put("*", new XMIResourceFactoryImpl());
+						ResourceSet resSet = new ResourceSetImpl();
+						Resource resource = resSet.getResource(uri, true);
+						EObject eObject = resource.getContents().get(0);
+						System.out.println(eObject);
 					}
-				}
+			 	}
 			}
 		});
 		buttonOpenEcoreModel.setText("...");

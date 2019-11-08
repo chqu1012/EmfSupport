@@ -7,6 +7,7 @@
             allPopups="false"
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
          <menu
+               icon="icons/icons8-code-16-white.png"
                label="EMF Support">
             <command
                   commandId="de.dc.fx.emf.support.ide.command.generateStub"
