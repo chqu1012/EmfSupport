@@ -10,6 +10,7 @@ class FileTemplate implements IGenerator{
 	import org.eclipse.emf.ecore.EFactory;
 	import org.eclipse.emf.ecore.EPackage;
 	
+	import «input.basePackage».file.*;
 	import «input.basePackage».*;
 	import de.dc.fx.emf.support.file.EmfFile;
 	

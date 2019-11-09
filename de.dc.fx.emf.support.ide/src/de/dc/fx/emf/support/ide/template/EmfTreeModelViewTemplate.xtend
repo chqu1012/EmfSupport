@@ -12,6 +12,7 @@ class EmfTreeModelViewTemplate implements IGenerator{
 	import org.greenrobot.eventbus.Subscribe;
 	
 	import «t.basePackage».*;
+	import «t.basePackage».manager.*;
 	import de.dc.fx.emf.support.file.IEmfManager;
 	import de.dc.javafx.xcore.workbench.emf.ui.EmfTreeModelView;
 	import de.dc.javafx.xcore.workbench.emf.ui.di.EMFPlatform;
@@ -20,11 +21,11 @@ class EmfTreeModelViewTemplate implements IGenerator{
 	import de.dc.javafx.xcore.workbench.emf.ui.event.EventTopic;
 	import de.dc.javafx.xcore.workbench.emf.ui.event.IEventBroker;
 	
-	public class «t.name»EmfTreeModeView extends EmfTreeModelView<«t.name»> {
+	public class «t.name»EmfTreeModelView extends EmfTreeModelView<«t.name»> {
 		
-		public «t.name»EmfTreeModeView() {
+		public «t.name»EmfTreeModelView() {
 			// Set edit mode for several attributes
-			addEditableFor(«t.name»Package.eINSTANCE.getName());
+			// addEditableFor(«t.name»Package.eINSTANCE.getName());
 	
 			
 			EMFPlatform.getInstance(IEventBroker.class).register(this);

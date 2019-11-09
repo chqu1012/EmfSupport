@@ -17,7 +17,7 @@ class DetailedEmfTreeViewTemplate implements IGenerator{
 	
 		@Override
 		protected EmfTreeModelView<AppLayout> initEmfModelTreeView() {
-			return new «t.name»EmfTreeModeView();
+			return new «t.name»EmfTreeModelView();
 		}
 	
 	}
