@@ -5,7 +5,7 @@ import de.dc.fx.emf.support.ide.model.GInput
 class EmfManagerTemplate implements IGenerator{
 	
 	override gen(GInput input)'''
-	package «input.basePackage».file;
+	package «input.basePackage».manager;
 	
 	import org.eclipse.emf.common.notify.AdapterFactory;
 	import org.eclipse.emf.ecore.EFactory;
@@ -46,6 +46,6 @@ class EmfManagerTemplate implements IGenerator{
 	}
 	'''
 	
-	override filename(GInput input)'''«input.name».File.java'''
+	override filename(GInput input)'''«input.name»EmfManager.java'''
 	
 }

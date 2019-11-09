@@ -27,12 +27,12 @@ class FileTemplate implements IGenerator{
 	
 		@Override
 		public String getExtension() {
-			return "applayout";
+			return "«input.fileExtension»";
 		}
 	
 	}
 	'''
 	
-	override filename(GInput input)'''«input.name».File.java'''
+	override filename(GInput input)'''«input.name»File.java'''
 	
 }

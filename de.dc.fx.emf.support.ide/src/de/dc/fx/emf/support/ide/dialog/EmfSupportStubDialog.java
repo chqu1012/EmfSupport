@@ -1,6 +1,9 @@
 package de.dc.fx.emf.support.ide.dialog;
+import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -40,6 +43,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.dialogs.OpenResourceDialog;
 
 import de.dc.fx.emf.support.ide.model.GInput;
+import de.dc.fx.emf.support.ide.template.IGenerator;
+import de.dc.fx.emf.support.ide.template.Templates;
 import de.dc.fx.emf.support.util.XcoreUtil;
 
 public class EmfSupportStubDialog extends TitleAreaDialog {
@@ -87,6 +92,20 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 						if (result instanceof File) {
 							File file = (File) result;
 							parseXcore(file);
+							
+							for (Templates tpl : Templates.values()) {
+								IGenerator template = tpl.getTemplate();
+								String content = template.gen(input);
+								
+								String projectPath = project.getLocationURI().getRawPath()+"/src/main/java/";
+								new java.io.File(projectPath).mkdirs();
+								String exportPath = projectPath+ input.getBasePackage().replace('.', '/')+tpl.getExportPath(input);
+								try {
+									FileUtils.write(new java.io.File(exportPath), content, Charsets.UTF_8);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+							}
 						}
 					}
 				}
@@ -186,7 +205,6 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 					input.setFileExtension(fileExtension);
 				}
 				if (modelName !=null) {
-					System.out.println(modelName);
 					input.setName(modelName);
 				}
 			});
