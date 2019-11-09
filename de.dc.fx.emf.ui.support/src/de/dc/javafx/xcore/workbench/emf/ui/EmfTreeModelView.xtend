@@ -52,6 +52,7 @@ import javafx.stage.Stage
 import java.util.Arrays
 import java.util.List
 import javafx.scene.Node
+import javafx.stage.FileChooser.ExtensionFilter
 
 abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 	
@@ -104,14 +105,19 @@ abstract class EmfTreeModelView<T> extends EmfModelView<T> {
 	def onMenuItemAction(ActionEvent e){
 		val source = e.source
 		val chooser = new FileChooser
+		chooser.extensionFilters += new ExtensionFilter(emfManager.file.extension.toFirstUpper+' Files', '*.'+emfManager.file.extension)
 		if(source == saveMenu){
 			val file = chooser.showSaveDialog(new Stage)
-			emfManager.file.write(emfManager.root, file.absolutePath)
+			if(file!==null){
+				emfManager.file.write(emfManager.root, file.absolutePath)
+			}
 		}else if(source == loadMenu){
 			val file = chooser.showOpenDialog(new Stage)
-			val root = emfManager.file.load(file.absolutePath)
-			emfManager.root = root
-			initTreeView
+			if(file!==null){
+				val root = emfManager.file.load(file.absolutePath)
+				emfManager.root = root
+				initTreeView
+			}
 		}
 	}
 
