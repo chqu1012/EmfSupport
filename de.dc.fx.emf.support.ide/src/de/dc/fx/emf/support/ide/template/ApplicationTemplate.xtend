@@ -5,7 +5,7 @@ import de.dc.fx.emf.support.ide.model.GInput
 class ApplicationTemplate implements IGenerator{
 	
 	override gen(GInput input)'''
-	package «input.packagePath»;
+	package «input.basePackage»;
 	
 	import de.dc.javafx.xcore.workbench.emf.ui.di.EMFPlatform;
 	import javafx.application.Application;

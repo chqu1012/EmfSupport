@@ -1,19 +1,24 @@
 package de.dc.fx.emf.support.ide.dialog;
 import java.util.Map;
 
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xcore.XClassifier;
+import org.eclipse.emf.ecore.xcore.impl.XPackageImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.core.PackageFragmentRoot;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,9 +37,19 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.ide.dialogs.OpenResourceDialog;
+
+import de.dc.fx.emf.support.ide.model.GInput;
+import de.dc.fx.emf.support.util.XcoreUtil;
 
 public class EmfSupportStubDialog extends TitleAreaDialog {
+	private DataBindingContext m_bindingContext;
 	private Text textEcoreModel;
+	private Text textEPackage;
+	private Text textEFactory;
+	private Text textBasePackage;
+	
+	private GInput input = new GInput();
 
 	public EmfSupportStubDialog(Shell parentShell) {
 		super(parentShell);
@@ -61,35 +76,69 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		buttonOpenEcoreModel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				IProject project = getCurrentProject();
-//				OpenResourceDialog dialog = new OpenResourceDialog(new Shell(), project, IResource.FILE);
-//				int code = dialog.open();
-//				if (code==0) {
-//					if (dialog.getResult().length==1) {
-//						Object result = dialog.getResult()[0];
-//						if (result instanceof File) {
-//							File file = (File) result;
-//							System.out.println(file.getAbsolutePath());
-//						}
-//					}
-//				}
-				ResourceDialog dialog = new ResourceDialog(new Shell(), "Select an Ecore Resource", SWT.OPEN | SWT.MULTI);
-				if (dialog.open() == ResourceDialog.OK) {
-					for (org.eclipse.emf.common.util.URI uri : dialog.getURIs()) {
-						Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-						Map<String, Object> m = reg.getExtensionToFactoryMap();
-						m.put("*", new XMIResourceFactoryImpl());
-						ResourceSet resSet = new ResourceSetImpl();
-						Resource resource = resSet.getResource(uri, true);
-						EObject eObject = resource.getContents().get(0);
-						System.out.println(eObject);
+				IProject project = getCurrentProject();
+				OpenResourceDialog dialog = new OpenResourceDialog(new Shell(), project, IResource.FILE);
+				int code = dialog.open();
+				if (code==0) {
+					if (dialog.getResult().length==1) {
+						Object result = dialog.getResult()[0];
+						if (result instanceof File) {
+							File file = (File) result;
+							parseXcore(file);
+						}
 					}
-			 	}
+				}
 			}
 		});
 		buttonOpenEcoreModel.setText("...");
+		
+		Label lblBasePackage = new Label(container, SWT.NONE);
+		lblBasePackage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblBasePackage.setText("Base Package:");
+		
+		textBasePackage = new Text(container, SWT.BORDER);
+		textBasePackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
+		
+		Label lblEpackage = new Label(container, SWT.NONE);
+		lblEpackage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblEpackage.setText("EPackage:");
+		
+		textEPackage = new Text(container, SWT.BORDER);
+		textEPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button buttonEPackage = new Button(container, SWT.NONE);
+		buttonEPackage.setText("...");
+		
+		Label lblEfactory = new Label(container, SWT.NONE);
+		lblEfactory.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblEfactory.setText("EFactory:");
+		
+		textEFactory = new Text(container, SWT.BORDER);
+		textEFactory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button buttonEFactory = new Button(container, SWT.NONE);
+		buttonEFactory.setText("...");
 
 		return area;
+	}
+	
+	private void parseXcore(File file) {
+		java.net.URI fileURI = file.getLocationURI();
+
+		URI uri = URI.createURI(fileURI.toString());
+		input.setEcoreURI(uri);
+		input.setEcorePath(file.getFullPath().toOSString());
+		
+		XPackageImpl xpack = XcoreUtil.parse(fileURI.toString());
+		
+		input.setBasePackage(xpack.getName());
+		
+		if (!xpack.getClassifiers().isEmpty()) {
+			XClassifier xclass = xpack.getClassifiers().get(0);
+			input.seteFactoryString(xclass.getName()+"Factory");
+			input.setEpackageString(xclass.getName()+"Package");
+		}
 	}
 	
 	public IProject getCurrentProject() {
@@ -123,11 +172,32 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		m_bindingContext = initDataBindings();
 	}
 
 	@Override
 	protected Point getInitialSize() {
 		return new Point(650, 488);
 	}
-
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
+		//
+		IObservableValue observeTextTextEcoreModelObserveWidget = WidgetProperties.text(SWT.Modify).observe(textEcoreModel);
+		IObservableValue ecorePathInputObserveValue = BeanProperties.value("ecorePath").observe(input);
+		bindingContext.bindValue(observeTextTextEcoreModelObserveWidget, ecorePathInputObserveValue, null, null);
+		//
+		IObservableValue observeTextTextBasePackageObserveWidget = WidgetProperties.text(SWT.Modify).observe(textBasePackage);
+		IObservableValue basePackageInputObserveValue = BeanProperties.value("basePackage").observe(input);
+		bindingContext.bindValue(observeTextTextBasePackageObserveWidget, basePackageInputObserveValue, null, null);
+		//
+		IObservableValue observeTextTextEPackageObserveWidget = WidgetProperties.text(SWT.Modify).observe(textEPackage);
+		IObservableValue epackageStringInputObserveValue = BeanProperties.value("epackageString").observe(input);
+		bindingContext.bindValue(observeTextTextEPackageObserveWidget, epackageStringInputObserveValue, null, null);
+		//
+		IObservableValue observeTextTextEFactoryObserveWidget = WidgetProperties.text(SWT.Modify).observe(textEFactory);
+		IObservableValue eFactoryStringInputObserveValue = BeanProperties.value("eFactoryString").observe(input);
+		bindingContext.bindValue(observeTextTextEFactoryObserveWidget, eFactoryStringInputObserveValue, null, null);
+		//
+		return bindingContext;
+	}
 }

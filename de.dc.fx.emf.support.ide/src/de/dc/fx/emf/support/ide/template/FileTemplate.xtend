@@ -5,7 +5,7 @@ import de.dc.fx.emf.support.ide.model.GInput
 class FileTemplate implements IGenerator{
 	
 	override gen(GInput input)'''
-	package «input.packagePath».file;
+	package «input.basePackage».file;
 	
 	import org.eclipse.emf.ecore.EFactory;
 	import org.eclipse.emf.ecore.EPackage;
