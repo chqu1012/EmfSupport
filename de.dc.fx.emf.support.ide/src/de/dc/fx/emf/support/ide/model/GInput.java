@@ -49,7 +49,7 @@ public class GInput extends ModelObject{
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		firePropertyChange("name", this.name, this.name = name);
 	}
 
 	public URI getEcoreURI() {

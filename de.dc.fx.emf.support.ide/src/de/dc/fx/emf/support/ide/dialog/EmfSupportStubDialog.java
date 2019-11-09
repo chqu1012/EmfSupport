@@ -51,6 +51,7 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 	
 	private GInput input = new GInput();
 	private Text textFileExtension;
+	private Text textModelName;
 
 	public EmfSupportStubDialog(Shell parentShell) {
 		super(parentShell);
@@ -101,6 +102,14 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		textBasePackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(container, SWT.NONE);
 		
+		Label lblModelname = new Label(container, SWT.NONE);
+		lblModelname.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblModelname.setText("ModelName:");
+		
+		textModelName = new Text(container, SWT.BORDER);
+		textModelName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
+		
 		Label lblEpackage = new Label(container, SWT.NONE);
 		lblEpackage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEpackage.setText("EPackage:");
@@ -147,11 +156,17 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 			input.seteFactoryString(xclass.getName()+"Factory");
 			input.setEpackageString(xclass.getName()+"Package");
 			input.setFileExtension(xclass.getName().toLowerCase());
+			input.setName(xclass.getName());
 			
 			xpack.getAnnotations().forEach(a->{
 				String fileExtension = a.getDetails().get("fileExtensions");
+				String modelName = a.getDetails().get("modelName");
 				if (fileExtension!=null) {
 					input.setFileExtension(fileExtension);
+				}
+				if (modelName !=null) {
+					System.out.println(modelName);
+					input.setName(modelName);
 				}
 			});
 		}
@@ -217,6 +232,10 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		IObservableValue observeTextTextFileExtensionObserveWidget = WidgetProperties.text(SWT.Modify).observe(textFileExtension);
 		IObservableValue fileExtensionInputObserveValue = BeanProperties.value("fileExtension").observe(input);
 		bindingContext.bindValue(observeTextTextFileExtensionObserveWidget, fileExtensionInputObserveValue, null, null);
+		//
+		IObservableValue observeTextTextModelNameObserveWidget = WidgetProperties.text(SWT.Modify).observe(textModelName);
+		IObservableValue nameInputObserveValue = BeanProperties.value("name").observe(input);
+		bindingContext.bindValue(observeTextTextModelNameObserveWidget, nameInputObserveValue, null, null);
 		//
 		return bindingContext;
 	}
