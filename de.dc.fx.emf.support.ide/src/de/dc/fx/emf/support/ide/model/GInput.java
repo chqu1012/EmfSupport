@@ -9,6 +9,7 @@ public class GInput extends ModelObject{
 	private String epackageString;
 	private String eFactoryString;
 	private String ecorePath;
+	private String fileExtension;
 	private URI ecoreURI;
 
 	public String getEcorePath() {
@@ -57,5 +58,13 @@ public class GInput extends ModelObject{
 
 	public void setEcoreURI(URI ecoreURI) {
 		firePropertyChange("ecoreURI", this.ecoreURI, this.ecoreURI = ecoreURI);
+	}
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
+	public void setFileExtension(String fileExtension) {
+		firePropertyChange("fileExtension", this.fileExtension, this.fileExtension = fileExtension);
 	}
 }

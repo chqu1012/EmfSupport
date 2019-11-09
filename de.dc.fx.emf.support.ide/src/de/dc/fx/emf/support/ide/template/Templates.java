@@ -5,6 +5,7 @@ import de.dc.fx.emf.support.ide.model.GInput;
 public enum Templates {
 	APPLICATION(new ApplicationTemplate(), "/"),
 	FILE_TEMPLATE(new FileTemplate(), "/file/"),
+	DETAILED_EMF_TREEVIEW(new DetailedEmfTreeViewTemplate(), "/view/"),
 	;
 	
 	private IGenerator template;

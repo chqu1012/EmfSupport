@@ -50,6 +50,7 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 	private Text textBasePackage;
 	
 	private GInput input = new GInput();
+	private Text textFileExtension;
 
 	public EmfSupportStubDialog(Shell parentShell) {
 		super(parentShell);
@@ -119,6 +120,14 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		
 		Button buttonEFactory = new Button(container, SWT.NONE);
 		buttonEFactory.setText("...");
+		
+		Label lblFileExtension = new Label(container, SWT.NONE);
+		lblFileExtension.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFileExtension.setText("File Extension:");
+		
+		textFileExtension = new Text(container, SWT.BORDER);
+		textFileExtension.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
 
 		return area;
 	}
@@ -131,13 +140,20 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		input.setEcorePath(file.getFullPath().toOSString());
 		
 		XPackageImpl xpack = XcoreUtil.parse(fileURI.toString());
-		
 		input.setBasePackage(xpack.getName());
 		
 		if (!xpack.getClassifiers().isEmpty()) {
 			XClassifier xclass = xpack.getClassifiers().get(0);
 			input.seteFactoryString(xclass.getName()+"Factory");
 			input.setEpackageString(xclass.getName()+"Package");
+			input.setFileExtension(xclass.getName().toLowerCase());
+			
+			xpack.getAnnotations().forEach(a->{
+				String fileExtension = a.getDetails().get("fileExtensions");
+				if (fileExtension!=null) {
+					input.setFileExtension(fileExtension);
+				}
+			});
 		}
 	}
 	
@@ -197,6 +213,10 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		IObservableValue observeTextTextEFactoryObserveWidget = WidgetProperties.text(SWT.Modify).observe(textEFactory);
 		IObservableValue eFactoryStringInputObserveValue = BeanProperties.value("eFactoryString").observe(input);
 		bindingContext.bindValue(observeTextTextEFactoryObserveWidget, eFactoryStringInputObserveValue, null, null);
+		//
+		IObservableValue observeTextTextFileExtensionObserveWidget = WidgetProperties.text(SWT.Modify).observe(textFileExtension);
+		IObservableValue fileExtensionInputObserveValue = BeanProperties.value("fileExtension").observe(input);
+		bindingContext.bindValue(observeTextTextFileExtensionObserveWidget, fileExtensionInputObserveValue, null, null);
 		//
 		return bindingContext;
 	}

@@ -10,21 +10,19 @@ class FileTemplate implements IGenerator{
 	import org.eclipse.emf.ecore.EFactory;
 	import org.eclipse.emf.ecore.EPackage;
 	
-	import de.dc.fx.applayout.model.AppLayout;
-	import de.dc.fx.applayout.model.AppLayoutFactory;
-	import de.dc.fx.applayout.model.AppLayoutPackage;
+	import «input.basePackage».*;
 	import de.dc.fx.emf.support.file.EmfFile;
 	
 	public class «input.name»File extends EmfFile<«input.name»>{
 	
 		@Override
 		public EPackage getEPackageEInstance() {
-			return AppLayoutPackage.eINSTANCE;
+			return «input.epackageString».eINSTANCE;
 		}
 	
 		@Override
 		public EFactory getEFactoryEInstance() {
-			return AppLayoutFactory.eINSTANCE;
+			return «input.geteFactoryString».eINSTANCE;
 		}
 	
 		@Override
