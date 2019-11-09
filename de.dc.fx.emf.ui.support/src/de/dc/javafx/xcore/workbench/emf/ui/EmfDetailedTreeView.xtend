@@ -1,20 +1,5 @@
 package de.dc.javafx.xcore.workbench.emf.ui
 
-import java.io.File
-import java.io.IOException
-import java.net.URL
-import java.util.Collection
-import org.eclipse.emf.common.command.Command
-import org.eclipse.emf.common.util.EList
-import org.eclipse.emf.ecore.EAttribute
-import org.eclipse.emf.ecore.EClass
-import org.eclipse.emf.ecore.EClassifier
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.edit.command.AddCommand
-import org.eclipse.emf.edit.command.CommandParameter
-import org.eclipse.emf.edit.domain.EditingDomain
-import org.eclipse.emf.edit.provider.IItemLabelProvider
-import de.dc.fx.emf.support.file.IEmfManager
 import de.dc.fx.emf.support.view.IEmfEditorPart
 import de.dc.javafx.xcore.workbench.emf.ui.controller.BaseEmfDetailedTreeViewController
 import de.dc.javafx.xcore.workbench.emf.ui.di.EMFPlatform
@@ -22,10 +7,10 @@ import de.dc.javafx.xcore.workbench.emf.ui.event.EventContext
 import de.dc.javafx.xcore.workbench.emf.ui.event.IEventBroker
 import de.dc.javafx.xcore.workbench.emf.ui.util.ControlByTypeSwitch
 import de.dc.javafx.xcore.workbench.emf.ui.util.EmfUtil
+import java.io.File
+import java.net.URL
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.fxml.FXMLLoader
 import javafx.scene.Node
@@ -35,6 +20,13 @@ import javafx.scene.control.TreeItem
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
+import org.eclipse.emf.common.command.Command
+import org.eclipse.emf.ecore.EClass
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.edit.command.AddCommand
+import org.eclipse.emf.edit.command.CommandParameter
+import org.eclipse.emf.edit.domain.EditingDomain
+import org.eclipse.emf.edit.provider.IItemLabelProvider
 
 abstract class EmfDetailedTreeView<T> extends BaseEmfDetailedTreeViewController implements ChangeListener<TreeItem<Object>>, IEmfEditorPart<T> {
 	

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.dc.fx.emf.support.ide.feature_1.0.0.201911091502.jar" id="de.dc.fx.emf.support.ide.feature" version="1.0.0.201911091502">
+      <category name="de.dc.fx.emf.support.ide.update"/>
+   </feature>
+   <category-def name="de.dc.fx.emf.support.ide.update" label="EMF Support IDE"/>
+</site>
