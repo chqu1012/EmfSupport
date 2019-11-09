@@ -93,6 +93,17 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 			}
 		});
 		buttonOpenEcoreModel.setText("...");
+		new Label(container, SWT.NONE);
+		
+		Button btnOverrideDefaultOption = new Button(container, SWT.CHECK);
+		btnOverrideDefaultOption.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				overrideDefaultValues(btnOverrideDefaultOption);
+			}
+		});
+		btnOverrideDefaultOption.setText("Override default option");
+		new Label(container, SWT.NONE);
 		
 		Label lblBasePackage = new Label(container, SWT.NONE);
 		lblBasePackage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -138,7 +149,17 @@ public class EmfSupportStubDialog extends TitleAreaDialog {
 		textFileExtension.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(container, SWT.NONE);
 
+		overrideDefaultValues(btnOverrideDefaultOption);
+		
 		return area;
+	}
+	
+	private void overrideDefaultValues(Button button) {
+		textBasePackage.setEnabled(button.getSelection());
+		textModelName.setEnabled(button.getSelection());
+		textEPackage.setEnabled(button.getSelection());
+		textEFactory.setEnabled(button.getSelection());
+		textFileExtension.setEnabled(button.getSelection());
 	}
 	
 	private void parseXcore(File file) {
