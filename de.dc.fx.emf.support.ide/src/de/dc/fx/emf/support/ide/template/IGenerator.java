@@ -4,7 +4,7 @@ import de.dc.fx.emf.support.ide.model.GInput;
 
 public interface IGenerator {
 
-	String gen(GInput input);
+	String gen(GInput t);
 	
-	String path(GInput input);
+	String filename(GInput t);
 }

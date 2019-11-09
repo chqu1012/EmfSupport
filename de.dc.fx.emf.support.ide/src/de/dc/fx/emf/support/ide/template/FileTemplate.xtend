@@ -35,6 +35,6 @@ class FileTemplate implements IGenerator{
 	}
 	'''
 	
-	override path(GInput input)'''/file/«input.name».File.java'''
+	override filename(GInput input)'''«input.name».File.java'''
 	
 }

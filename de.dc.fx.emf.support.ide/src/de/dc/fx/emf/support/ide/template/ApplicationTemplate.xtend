@@ -28,6 +28,6 @@ class ApplicationTemplate implements IGenerator{
 	}
 	'''
 	
-	override path(GInput input)'''/«input.name»Application.java'''
+	override filename(GInput t) '''«t.name»Application.java'''
 	
 }
