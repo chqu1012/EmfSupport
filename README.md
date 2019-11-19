@@ -10,6 +10,8 @@
  javax.inject,
  de.dc.fx.emf.support;bundle-version="1.0.0",
  de.dc.fx.emf.ui.support;bundle-version="1.0.0",
+ de.dc.fx.emf.support.mm;bundle-version="0.1.0",
+ de.dc.fx.emf.support.mm.edit;bundle-version="1.0.0",
  org.eclipse.xtext.xbase.lib
 ```
 * Add your EMF model and edit project to the dependency
